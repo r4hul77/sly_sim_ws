@@ -1,0 +1,119 @@
+    <robot name="sly_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find sly_description)/urdf/sly_bot.xacro" />
+    <gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <imu>
+            <angular_velocity>
+              <x>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>2e-3</stddev>
+                </noise>
+              </x>
+              <y>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>2e-3</stddev>
+                </noise>
+              </y>
+              <z>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>2e-3</stddev>
+                </noise>
+              </z>
+            </angular_velocity>
+            <linear_acceleration>
+              <x>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>1.7e-1</stddev>
+                </noise>
+              </x>
+              <y>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>1.7e-1</stddev>
+                </noise>
+              </y>
+              <z>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>1.7e-1</stddev>
+                </noise>
+              </z>
+            </linear_acceleration>
+        </imu>
+        <visualize>true</visualize>
+        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <ros>
+            <namespace>/</namespace>
+            <remapping>~/out:=/imu/data</remapping>
+        </ros>
+        <frame_name>imu_link</frame_name>
+        <initial_orientation_as_reference>false</initial_orientation_as_reference>
+        </plugin>
+    </sensor>
+    </gazebo>
+    <gazebo>
+    <plugin name='skid_steer_drive' filename='libgazebo_ros_diff_drive.so'>
+        <ros>
+            <namespace>/</namespace>
+            <remapping>/sly/cmd_vel:=/cmd_vel</remapping>
+            <remapping>/sly/odom:=/vel</remapping>
+        </ros>
+
+        <update_rate>100.0</update_rate>
+        <num_wheel_pairs>2</num_wheel_pairs>
+
+        <left_joint>axial_0_0</left_joint>
+        <right_joint>axial_1_1</right_joint>
+        <left_joint>axial_0_1</left_joint>
+        <right_joint>axial_1_0</right_joint>
+
+        <wheel_separation>0.55</wheel_separation>
+        <wheel_separation>0.55</wheel_separation>
+        <wheel_diameter>0.381</wheel_diameter>
+        <wheel_diameter>0.381</wheel_diameter>
+
+        <max_wheel_torque>20</max_wheel_torque>
+        <max_wheel_acceleration>1.0</max_wheel_acceleration>
+        <publish_odom>true</publish_odom>
+        <publish_odom_tf>false</publish_odom_tf>
+        <publish_wheel_tf>false</publish_wheel_tf>
+        <odometry_frame>odom</odometry_frame>
+        <robot_base_frame>base_link</robot_base_frame>
+    </plugin>
+    </gazebo>
+    <gazebo reference="gps">
+        <sensor name="gps_sensor" type="gps">
+            <always_on>true</always_on>
+            <update_rate>10.0</update_rate>
+            <gps>
+                <position_sensing>
+                <horizontal>
+                    <noise type="gaussian">
+                    <mean>0.0</mean>
+                    <stddev>0.01</stddev>
+                    </noise>
+                </horizontal>
+                <vertical>
+                    <noise type="gaussian">
+                    <mean>0.0</mean>
+                    <stddev>0.01</stddev>
+                    </noise>
+                </vertical>
+                </position_sensing>
+            </gps>
+            <plugin name="gps_plugin" filename="libgazebo_ros_gps_sensor.so">
+                <ros>
+                    <remapping>~/out:=/gps/fix</remapping>
+                </ros>
+                <frame_name>gps</frame_name>
+            </plugin>
+        </sensor>
+    </gazebo>
+</robot>

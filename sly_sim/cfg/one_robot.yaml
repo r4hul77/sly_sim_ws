@@ -1,0 +1,14 @@
+- initial_pose:
+    orientation:
+      w: 0.7066811
+      x: 0
+      y: 0
+      z: 0.7075322
+    position:
+      x: 5
+      y: -6
+      z: 0.5
+  name: sly_0
+  model_path: 'urdf/sly_gazebo.xacro'
+  robot_namespace: 'sly'
+  package_name: 'sly_sim'
